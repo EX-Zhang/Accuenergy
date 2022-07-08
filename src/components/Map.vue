@@ -1,7 +1,13 @@
 
 <template>
 
-  <div id="Gmaps">
+<div id="Gmaps">
+
+  <div class="vxe-button" style="text-align:center;">
+
+    <button class="vxe-button type--button theme--primary" @click="setCurPosition">Current Location</button>
+    
+  </div>
   
     <Gmaps class="Gmaps" ref="Gmaps"/>
     
@@ -144,6 +150,8 @@ import Gmaps from './Gmaps.vue';
 
       setCurPosition(){
 
+	  console.log("Set");
+
 	  this.$refs.Gmaps.updateCenter(this.current_position);
 	  
       },
@@ -161,7 +169,7 @@ import Gmaps from './Gmaps.vue';
 	      this.results = [];
 
 	  }
-	  else if(this.result.length > 0){
+	  else if(this.results.length > 0){
 
 	      this.locations.unshift(this.results[0]);
 
@@ -177,6 +185,8 @@ import Gmaps from './Gmaps.vue';
 	  this.$refs.LocationTable.loadData(this.locations);
 
 	  this.updateLocations();
+
+	  this.setPage();
 
       },
 
@@ -208,6 +218,8 @@ import Gmaps from './Gmaps.vue';
 	  this.$refs.LocationTable.reloadData(this.locations);
 
 	  this.updateLocations();
+
+	  this.setPage();
 
       },
 
@@ -267,7 +279,21 @@ import Gmaps from './Gmaps.vue';
 
       setPage(){
 
-	  console.log(this.currentPage);
+	  var total = this.locations.length;
+
+	  var totalPage = total / this.pageSize + ( total % this.pageSize == 0 ? 0 : 1);
+
+	  if(this.currentPage > totalPage){
+
+	      this.currentPage = totalPage;
+	      
+	  };
+
+	  var start = (this.currentPage - 1) * this.pageSize;
+
+	  var end = Math.min(total,this.currentPage*this.pageSize);
+
+	  this.$refs.LocationTable.loadData(this.locations.slice(start,end));
 	  
       },
 
