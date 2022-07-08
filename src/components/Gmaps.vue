@@ -1,6 +1,6 @@
 
 <template>
-  <GoogleMap api-key="AIzaSyCbD0rWlHg0HNA6O8u9R3FRrV6r9xkSrlA" style="width:100%;height:100%;" :center="center" :zoom="5">
+  <GoogleMap ref="Gmap" api-key="AIzaSyCbD0rWlHg0HNA6O8u9R3FRrV6r9xkSrlA" style="width:100%;height:100%;" :center="center" :zoom="5">
   
   <Marker v-for="(location, index) in locations" :options="{ position: location.Location, title: location.Name }" />
 
@@ -79,6 +79,12 @@
 
 		this.getTime();
 
+	    },
+
+	    MoveToPosition(location){
+
+		this.$refs.Gmap.map.panTo(location);
+		
 	    },
 
 	    getTime(){

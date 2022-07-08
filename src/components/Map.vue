@@ -3,9 +3,9 @@
 
 <div id="Gmaps">
 
-  <div class="vxe-button" style="text-align:center;">
+  <div style="text-align:center;">
 
-    <button class="vxe-button type--button theme--primary" @click="setCurPosition">Current Location</button>
+    <button class="vxe-button type--button theme--primary is--round" @click="MoveToCurPosition">Current Location</button>
     
   </div>
   
@@ -94,15 +94,16 @@ import { defineComponent, reactive } from "vue";
 
 import Gmaps from './Gmaps.vue';
 
-  export default defineComponent({
 
-      components: { Gmaps },
+export default defineComponent({
 
-      data(){
+    components: { Gmaps },
 
-          return {
+    data(){
 
-              current_position: { lat: 0, lng: 0 },
+	return {
+
+	    current_position: { lat: 0, lng: 0 },
 
               locations: [],
 
@@ -124,35 +125,56 @@ import Gmaps from './Gmaps.vue';
 
       setup(){},
 
-  mounted(){
+      mounted(){
 
-    this.getCurPosition();
+	  this.getCurPosition();
 
-  },
+      },
 
   methods: {
 
-    getCurPosition(){
+      getCurPosition(){
 
-      axios.get("https://api.my-ip.io/ip").then(response => {
+	  if (navigator.geolocation){
 
-          axios.get("http://ip-api.com/json/" + response.data).then(response => {
+	      navigator.geolocation.getCurrentPosition(this.setCurPosition,this.getCurPositionByAPI);
+	      
+	      return;
+	      
+	  }
 
-            this.current_position = { lat: response.data.lat, lng: response.data.lon};
-
-            this.setCurPosition();
-  
-        });
-  
-      });
+	  this.getCurPositionByAPI();
     
-    },
+      },
 
-      setCurPosition(){
+      getCurPositionByAPI(){
 
-	  console.log("Set");
+	  axios.get("/GetIP").then(response => {
+
+	      axios.get("/GetLocation/" + response.data).then(response => {
+
+		  this.current_position = { lat: response.data.lat, lng: response.data.lon };
+
+		  this.$refs.Gmaps.updateCenter(this.current_position);
+
+	      });
+  
+
+	  });
+	  
+      },
+
+      setCurPosition(position){
+
+	  this.current_position = { lat: position.coords.latitude, lng: position.coords.longitude };
 
 	  this.$refs.Gmaps.updateCenter(this.current_position);
+	  
+      },
+
+      MoveToCurPosition(){
+
+	  this.$refs.Gmaps.MoveToPosition(this.current_position);
 	  
       },
 
