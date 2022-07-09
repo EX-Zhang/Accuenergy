@@ -11,16 +11,7 @@ import App from './App.vue';
 
 VXETable.setup({
 
-    translate(key, args) {
-
-        if (key && key.indexOf('app.') > -1) {
-
-            return i18n.global.t(key, args);
-
-        }
-
-        return key;
-    }
+    i18n: (key, args) => i18n.global.t(key, args) // Set languaged of vxe-table module to English
 
 });
 

@@ -4,7 +4,7 @@
   
   <Marker v-for="(location, index) in locations" :options="{ position: location.Location, title: location.Name }" />
 
-  <InfoWindow v-if="visible" :options="{position: last_location.Location}">
+  <InfoWindow v-if="totalNum > 0" :options="{position: last_location.Location}">
 
     <div style="text-align: center">
 
@@ -32,21 +32,51 @@
 
 	components: { GoogleMap, Marker, InfoWindow },
 
+	props: {
+
+	    center: Object, // Coordinates of the location of the user
+
+	    locations: Array, // Array of searched locations
+
+	    totalNum: 0, // Total number of searched locations (To determine if the latest location should be updated)
+	    
+	},
+
+	watch: {
+
+	    totalNum: { // When the array of locations changed, update the infowindow of the timezone of the latest searched location
+
+		handler(newNum, oldNum){ 
+
+		    if(newNum > 0){
+
+			this.last_location = this.locations[0];
+
+			this.getTime();
+			
+		    }
+		    
+		}
+		
+	    },
+	    
+	},
+
 	data() {
 
 	    return {
 
-		center: { lat: 0, lng: 0 },
+		//center: { lat: 0, lng: 0 },
 
-		locations: [],
+		//locations: [],
 
-		last_location: { lat: 0, lng: 0 },
+		last_location: {}, // lastest searched location
 
 		visible: false,
 
-		TimeZone: "",
+		TimeZone: "", // String of the timezone
 
-		Time: "",
+		Time: "", // String of the time in format yyyy-mm-dd hh:MM
 		
 	    };
 	    
@@ -81,13 +111,13 @@
 
 	    },
 
-	    MoveToPosition(location){
+	    MoveToPosition(location){ // Move the center of the map to a certain location
 
 		this.$refs.Gmap.map.panTo(location);
 		
 	    },
 
-	    getTime(){
+	    getTime(){ // Get the timezone and current time by the coordinates
 
 		var timestamp = this.getUTCTimestamp();
 
@@ -109,7 +139,7 @@
 
 	    },
 
-	    getUTCTimestamp(){
+	    getUTCTimestamp(){ // Get current UTC timestamp by seconds
 
 		var date = new Date();
 
@@ -129,7 +159,7 @@
 
             },
 
-	    getFormatDateString(date){
+	    getFormatDateString(date){ // Change Date object to string in format yyyy-mm-dd hh:MM
 
 		var y = date.getFullYear();
 

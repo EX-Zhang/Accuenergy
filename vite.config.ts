@@ -15,21 +15,21 @@ export default defineConfig({
 
     server: {
 
-        proxy: {
+        proxy: { // Proxy for CORS Policy purpose
 
-            '/GetIP': {
+            '/GetIP': { // Web API to get the IP address of the user 
 
                 target: "https://api.my-ip.io/ip",
 
                 changeOrigin: true,
 
-                rewrite: path => path.replace(/^\/GetIP/, ''),
+                rewrite: path => path.replace(/^\/GetIP/, ''), // All the path start with '/GetIP' will be replaced by the target url
 
                 ws: false
 
             },
 
-            '/GetLocation': {
+            '/GetLocation': { // Web API to get the coordinates by the IP address
 
                 target: "http://ip-api.com/json",
 
@@ -41,7 +41,7 @@ export default defineConfig({
 
             },
 
-            '/Gapi': {
+            '/Gapi': { // Google map api
 
                 target: "https://maps.googleapis.com/maps/api",
 

@@ -1,7 +1,7 @@
 
 <template>
 
-<div id="Gmaps">
+<div id="Gmaps" style="z-index:0;">
 
   <div style="text-align:center;">
 
@@ -9,13 +9,15 @@
     
   </div>
   
-    <Gmaps class="Gmaps" ref="Gmaps"/>
+    <Gmaps class="Gmaps" :center="current_position" :locations="locations" :totalNum="locations.length" ref="Gmaps"/>
     
   </div>
 
-  <div id="Table">
+<div id="Table" style="z-index:999;">
 
-    <vxe-toolbar class="vxe" style="height:10%;">
+  <LocationTable :current_position="current_position" :locations="locations" />
+
+    <!--<vxe-toolbar class="vxe" style="height:10%;">
 
       <template #buttons>
       
@@ -46,11 +48,7 @@
 
 	</vxe-pulldown>
 
-	<div style="float: right;">
-
-	  <vxe-button status="primary" round @click="addLocation" ref="AddBtn">Add New</vxe-button>
-
-	</div>
+	<vxe-button status="primary" round @click="addLocation" ref="AddBtn" style="float:right;">Add New</vxe-button>
 
       </template>
 
@@ -80,7 +78,7 @@
       
       class="vxe"
       
-      ></vxe-pager>
+      ></vxe-pager>-->
 
   </div>
 
@@ -94,18 +92,19 @@ import { defineComponent, reactive } from "vue";
 
 import Gmaps from './Gmaps.vue';
 
+import LocationTable from './LocationTable.vue';
 
 export default defineComponent({
 
-    components: { Gmaps },
+    components: { Gmaps, LocationTable },
 
     data(){
 
 	return {
 
-	    current_position: { lat: 0, lng: 0 },
+	    current_position: { lat: 0, lng: 0 }, // Coordinates of the position of user
 
-              locations: [],
+              locations: [], // Array of searched locations
 
 	      result: { Name: "", Address: "", Location: {} },
 
@@ -133,7 +132,7 @@ export default defineComponent({
 
   methods: {
 
-      getCurPosition(){
+      getCurPosition(){ // Use browser's function to get the coordinates of user
 
 	  if (navigator.geolocation){
 
@@ -147,11 +146,11 @@ export default defineComponent({
     
       },
 
-      getCurPositionByAPI(){
+      getCurPositionByAPI(){ // Use web api to get the coordinates of user (Only when browser's is not working)
 
-	  axios.get("/GetIP").then(response => {
+	  axios.get("/GetIP").then(response => { // For CORS purpose, details are in the vite.config.ts
 
-	      axios.get("/GetLocation/" + response.data).then(response => {
+	      axios.get("/GetLocation/" + response.data).then(response => { // For CORS purpose, details are in the vite.config.ts
 
 		  this.current_position = { lat: response.data.lat, lng: response.data.lon };
 
@@ -164,15 +163,15 @@ export default defineComponent({
 	  
       },
 
-      setCurPosition(position){
+      setCurPosition(position){ // Function to set user's location if the browser's function is available
 
 	  this.current_position = { lat: position.coords.latitude, lng: position.coords.longitude };
 
-	  this.$refs.Gmaps.updateCenter(this.current_position);
+	  //this.$refs.Gmaps.updateCenter(this.current_position);
 	  
       },
 
-      MoveToCurPosition(){
+      MoveToCurPosition(){ // Function to move the center of map to the user's location
 
 	  this.$refs.Gmaps.MoveToPosition(this.current_position);
 	  
@@ -247,7 +246,7 @@ export default defineComponent({
 
       updateLocations(){
 
-	  this.$refs.Gmaps.updateLocations(this.locations);
+	  //this.$refs.Gmaps.updateLocations(this.locations);
 
       },
 

@@ -20,10 +20,10 @@ const messages = {
 
 const i18n = createI18n({
 
-    locale: 'zh_CN',
+    locale: 'en_US',
 
     messages,
 
 });
 
-export default i18n;
+export default i18n
