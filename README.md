@@ -2,6 +2,28 @@
 
 This template should help get you started developing with Vue 3 in Vite.
 
+## Important Note
+
+Because of the CORS policy, the project uses proxy to send request to web api.
+
+Please check the "DemoVideo.avi" which show all the possible functions of the project first.
+
+## Modules Used
+
+Vue3, vue3-google-map, vxe-table
+
+## Folders
+
+'./src/i18n': Contains a file 'index.ts' that makes vxe-table modules show in English
+
+## Files
+
+'./src/components/Map.vue': Component contains the Google Map and Table
+
+'./src/components/Gmaps.vue': Google map component, including function that getting timezone and current time by coordinates
+
+'./src/components/LocationTable.vue': Table component, including all the methods for searching and editting the locations
+ 
 ## Recommended IDE Setup
 
 [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).

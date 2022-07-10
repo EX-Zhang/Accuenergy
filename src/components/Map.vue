@@ -9,72 +9,9 @@
 
 <div id="Table">
 
-  <LocationTable :current_position="current_position" :locations="locations" style="z-index:999;"/>
+  <LocationTable :current_position="current_position" :locations="locations"/>
 
-    <!--<vxe-toolbar class="vxe" style="height:10%;">
-
-      <template #buttons>
-      
-	<vxe-button status="primary" @click="deleteLocations" round>Delete Selection</vxe-button>
-
-	<vxe-pulldown v-model="visible">
-
-	  <div class="vxe-input">
-	    
-	    <input id="LocationInput" ref="LocationInput" v-model="this.result.Name" placeholder="Location" @focus="setVisible" @input="searchLocation" @keyup.enter="addLocation" class="vxe-input--inner" />
-
-	  </div>
-
-	  <template #dropdown>
-
-	    <div class="dropdown">
-	  
-              <div class="list-item1" v-for="result in results" :key="result.Location" @click="selectLocation(result)">	
-	    	    
-		<span>{{ result.Name + result.Address }}</span>	
-	    
-              </div>
-	      
-	  
-            </div>
-
-	  </template>
-
-	</vxe-pulldown>
-
-	<vxe-button status="primary" round @click="addLocation" ref="AddBtn" style="float:right;">Add New</vxe-button>
-
-      </template>
-
-    </vxe-toolbar>
-
-    <vxe-table border :data="locations" class="vxe" ref="LocationTable" :align="'center'">
-
-      <vxe-column type="checkbox" width="60"></vxe-column>
-      
-      <vxe-column field="Name" title="Name"></vxe-column>
-
-      <vxe-column field="Address" title="Address"></vxe-column>
-    
-    </vxe-table>
-
-    <vxe-pager
-      
-      v-model:current-page="currentPage"
-      
-      v-model:page-size="pageSize"
-      
-      :total="locations.length"
-      
-      :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'FullJump']"
-
-      @page-change="setPage"
-      
-      class="vxe"
-      
-      ></vxe-pager>-->
-
-  </div>
+</div>
 
 </template>
 
@@ -99,18 +36,6 @@ export default defineComponent({
 	    current_position: { lat: 0, lng: 0 }, // Coordinates of the position of user
 
 	    locations: [], // Array of searched locations
-
-	    /*  result: { Name: "", Address: "", Location: {} },
-
-	      selected: false,
-
-	      results: [],
-
-	      visible: false,
-
-	      currentPage: 1,
-
-	      pageSize: 10,*/
 
 	};
 
@@ -165,162 +90,6 @@ export default defineComponent({
 
 	},
 
-      /*addLocation(){
-
-	  if(this.selected){
-
-	      this.locations.unshift(this.result);
-
-	      this.result = {};
-
-	      this.selected = false;
-
-	      this.results = [];
-
-	  }
-	  else if(this.results.length > 0){
-
-	      this.locations.unshift(this.results[0]);
-
-	      this.results = [];
-
-	  }
-	  else{
-
-
-	      
-	  }
-
-	  this.$refs.LocationTable.loadData(this.locations);
-
-	  this.updateLocations();
-
-	  this.setPage();
-
-      },
-
-      deleteLocations(){
-
-	  var remove = this.$refs.LocationTable.getCheckboxRecords(true);
-
-	  var new_array = []
-	  
-	  var index = 0;
-
-	  for(var i in this.locations){
-
-	      if(index < remove.length && this.locations[i].ID == remove[index].ID){
-
-		  index++;
-		  
-	      }
-	      else{
-
-		  new_array.push(this.locations[i]);
-		  
-	      }
-	      
-	  }
-
-	  this.locations = new_array;
-	  
-	  this.$refs.LocationTable.reloadData(this.locations);
-
-	  this.updateLocations();
-
-	  this.setPage();
-
-      },
-
-      updateLocations(){
-
-	  //this.$refs.Gmaps.updateLocations(this.locations);
-
-      },
-
-      searchLocation(){
-
-	  if(this.result.Name.length == 0){
-
-	      this.results = [];
-
-	      this.setVisible();
-
-	      return;
-	      
-	  }
-
-	  var url = "/Gapi/place/textsearch/json?key=AIzaSyCbD0rWlHg0HNA6O8u9R3FRrV6r9xkSrlA&radius=10";
-
-	  url += "&location=" + this.current_position.lat + "%2C" + this.current_position.lng;
-
-	  url += "&query=" + this.result.Name;
-
-	  axios.get(url).then(response => {
-
-	      var search = response.data.results;
-
-	      var n = search.length > 10 ? 10 : search.length;
-
-	      var results = [];
-
-	      for(let i=0;i<n;i++){
-
-		  var cur = search[i];
-
-		  results.push({ ID: cur.place_id, Name: cur.name, Address: cur.formatted_address, Location: cur.geometry.location});		  
-
-	      }
-
-	      this.results = results;
-
-	      this.setVisible();
-
-	  });
-
-      },
-
-	setVisible(){
-
-	  this.visible = this.results.length > 0;
-
-	},
-
-      setPage(){
-
-	  var total = this.locations.length;
-
-	  var totalPage = total / this.pageSize + ( total % this.pageSize == 0 ? 0 : 1);
-
-	  if(this.currentPage > totalPage){
-
-	      this.currentPage = totalPage;
-	      
-	  };
-
-	  var start = (this.currentPage - 1) * this.pageSize;
-
-	  var end = Math.min(total,this.currentPage*this.pageSize);
-
-	  this.$refs.LocationTable.loadData(this.locations.slice(start,end));
-	  
-      },
-
-      selectLocation(result){
-
-	  this.result = result;
-
-	  this.selected = true;
-
-	  this.visible = false;
-
-	  this.results = [];
-
-	  this.$refs.LocationInput.focus();
-	  
-      },*/
-
-              
   }
 
 });
@@ -328,21 +97,5 @@ export default defineComponent({
 </script>
 
 <style scoped>
-
-  .vxe{
-
-      float: right;
-
-      width: 90%;
-
-  }
-  
-  #LocationInput{
-
-      height: 100%;
-
-      width: 100%;
-
-  }
 
 </style>

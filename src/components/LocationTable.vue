@@ -92,17 +92,17 @@
 
           return {
 
-	      result: { Name: "", Address: "", Location: {} },
+	      result: { Name: "", Address: "", Location: {} }, // The selected location that prepared to add to the location array
 
-	      selected: false,
+	      selected: false, // Whether a result is selected
 
-	      results: [],
+	      results: [], // Array to store all possible results searched with the input string
 
-	      visible: false,
+	      visible: false, // Whether the dropdown list of possible results is visible
 
-	      currentPage: 1,
+	      currentPage: 1, // Current page of the table
 
-	      pageSize: 10,
+	      pageSize: 10, // Size of a page
 
           };
 
@@ -110,7 +110,7 @@
 
       methods: {
 
-          addLocation(){
+          addLocation(){ // Add the selected location to the array, or add the first search result if nothing is selected.
 
 	      if(this.selected){
 
@@ -134,15 +134,11 @@
 
 	      }
 
-	      //this.$refs.LocationTable.loadData(this.locations);
-
-	      //this.updateLocations();
-
 	      this.setPage();
 
 	  },
 
-	  deleteLocations(){
+	  deleteLocations(){ // Delete the selected locations.
 
 	      var remove = this.$refs.LocationTable.getCheckboxRecords(true);
 
@@ -173,23 +169,11 @@
 	      
 	      }
 
-	      //this.locations = new_array;
-	  
-	      //this.$refs.LocationTable.reloadData(this.locations);
-
-	      //this.updateLocations();
-
 	      this.setPage();
 
 	  },
 
-	  updateLocations(){
-
-	      this.$refs.Gmaps.updateLocations(this.locations);
-
-	  },
-
-	  searchLocation(){
+	  searchLocation(){ // Search location by the input string based on user's location.
 
 	      if(this.result.Name.length == 0){
 
@@ -231,13 +215,13 @@
 
 	  },
 
-	  setVisible(){
+	  setVisible(){ // Function to determine whether the dropdown list of search result is visible
 
 	      this.visible = this.results.length > 0;
 
 	  },
 
-	  setPage(){
+	  setPage(){ // Determine what locations should be shown in the current page
 
 	      var total = this.locations.length;
 
@@ -257,7 +241,7 @@
 	  
 	  },
 
-	  selectLocation(result){
+	  selectLocation(result){ // Select a location in the dropdown list
 
 	      this.result = result;
 
@@ -267,8 +251,6 @@
 
 	      this.results = [];
 
-	      this.$refs.LocationInput.focus();
-	  
 	  },
   
       }, 
