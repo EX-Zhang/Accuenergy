@@ -1,21 +1,15 @@
 
 <template>
 
-<div id="Gmaps" style="z-index:0;">
+<div id="Gmaps">
 
-  <div style="text-align:center;">
+  <Gmaps class="Gmaps" :center="current_position" :locations="locations" :totalNum="locations.length" ref="Gmaps"/>
 
-    <button class="vxe-button type--button theme--primary is--round" @click="MoveToCurPosition">Current Location</button>
-    
-  </div>
-  
-    <Gmaps class="Gmaps" :center="current_position" :locations="locations" :totalNum="locations.length" ref="Gmaps"/>
-    
-  </div>
+</div>
 
-<div id="Table" style="z-index:999;">
+<div id="Table">
 
-  <LocationTable :current_position="current_position" :locations="locations" />
+  <LocationTable :current_position="current_position" :locations="locations" style="z-index:999;"/>
 
     <!--<vxe-toolbar class="vxe" style="height:10%;">
 
@@ -86,7 +80,7 @@
 
 <script lang='ts'>
 
-    import axios from "axios";
+import axios from "axios";
 
 import { defineComponent, reactive } from "vue";
 
@@ -104,9 +98,9 @@ export default defineComponent({
 
 	    current_position: { lat: 0, lng: 0 }, // Coordinates of the position of user
 
-              locations: [], // Array of searched locations
+	    locations: [], // Array of searched locations
 
-	      result: { Name: "", Address: "", Location: {} },
+	    /*  result: { Name: "", Address: "", Location: {} },
 
 	      selected: false,
 
@@ -116,68 +110,62 @@ export default defineComponent({
 
 	      currentPage: 1,
 
-	      pageSize: 10,
+	      pageSize: 10,*/
 
-          };
+	};
 
-      },
+    },
 
-      setup(){},
+    mounted(){
 
-      mounted(){
+	this.getCurPosition();
 
-	  this.getCurPosition();
+    },
 
-      },
+    methods: {
 
-  methods: {
+	getCurPosition(){ // Use browser's function to get the coordinates of user
 
-      getCurPosition(){ // Use browser's function to get the coordinates of user
+	    if (navigator.geolocation){
 
-	  if (navigator.geolocation){
+		navigator.geolocation.getCurrentPosition(this.setCurPosition,this.getCurPositionByAPI);
 
-	      navigator.geolocation.getCurrentPosition(this.setCurPosition,this.getCurPositionByAPI);
-	      
-	      return;
-	      
-	  }
+		return;
 
-	  this.getCurPositionByAPI();
-    
-      },
+	    }
 
-      getCurPositionByAPI(){ // Use web api to get the coordinates of user (Only when browser's is not working)
+	    this.getCurPositionByAPI();
 
-	  axios.get("/GetIP").then(response => { // For CORS purpose, details are in the vite.config.ts
+	},
 
-	      axios.get("/GetLocation/" + response.data).then(response => { // For CORS purpose, details are in the vite.config.ts
+	getCurPositionByAPI(){ // Use web api to get the coordinates of user (Only when browser's function is not working)
 
-		  this.current_position = { lat: response.data.lat, lng: response.data.lon };
+	    axios.get("/GetIP").then(response => { // For CORS purpose, details are in the vite.config.ts
 
-		  this.$refs.Gmaps.updateCenter(this.current_position);
+		axios.get("/GetLocation/" + response.data).then(response => { // For CORS purpose, details are in the vite.config.ts
 
-	      });
-  
+		    this.current_position = { lat: response.data.lat, lng: response.data.lon };
 
-	  });
-	  
-      },
+		    this.$refs.Gmaps.updateCenter(this.current_position);
 
-      setCurPosition(position){ // Function to set user's location if the browser's function is available
+		});
 
-	  this.current_position = { lat: position.coords.latitude, lng: position.coords.longitude };
+	    });
+	},
 
-	  //this.$refs.Gmaps.updateCenter(this.current_position);
-	  
-      },
+	setCurPosition(position){ // Function to set user's location if the browser's function is available
 
-      MoveToCurPosition(){ // Function to move the center of map to the user's location
+	    this.current_position = { lat: position.coords.latitude, lng: position.coords.longitude };
 
-	  this.$refs.Gmaps.MoveToPosition(this.current_position);
-	  
-      },
+	},
 
-      addLocation(){
+	MoveToCurPosition(){ // Function to move the center of map to the user's location
+
+	    this.$refs.Gmaps.MoveToPosition(this.current_position);
+
+	},
+
+      /*addLocation(){
 
 	  if(this.selected){
 
@@ -330,12 +318,12 @@ export default defineComponent({
 
 	  this.$refs.LocationInput.focus();
 	  
-      },
+      },*/
 
               
   }
-  
-  });
+
+});
   
 </script>
 

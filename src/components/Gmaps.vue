@@ -1,10 +1,10 @@
 
 <template>
-  <GoogleMap ref="Gmap" api-key="AIzaSyCbD0rWlHg0HNA6O8u9R3FRrV6r9xkSrlA" style="width:100%;height:100%;" :center="center" :zoom="5">
+  <GoogleMap ref="Gmap" api-key="AIzaSyCbD0rWlHg0HNA6O8u9R3FRrV6r9xkSrlA" style="width:100%;height:100%;z-index:0;" :center="center" :zoom="5">
   
-  <Marker v-for="(location, index) in locations" :options="{ position: location.Location, title: location.Name }" />
+  <Marker v-for="(location, index) in locations" :options="{ position: location.Location, title: location.Name }" ref="Marker" />
 
-  <InfoWindow v-if="totalNum > 0" :options="{position: last_location.Location}">
+  <InfoWindow v-if="totalNum > 0" :options="{position: last_location.Location}" ref="info">
 
     <div style="text-align: center">
 
@@ -119,6 +119,10 @@
 
 	    getTime(){ // Get the timezone and current time by the coordinates
 
+		this.TimeZone = "";
+
+		this.Time = "";
+
 		var timestamp = this.getUTCTimestamp();
 
 		var url = "/Gapi/timezone/json?key=AIzaSyCbD0rWlHg0HNA6O8u9R3FRrV6r9xkSrlA";
@@ -139,7 +143,7 @@
 
 	    },
 
-	    getUTCTimestamp(){ // Get current UTC timestamp by seconds
+	    getUTCTimestamp(){ // Get current UTC timestamp in seconds
 
 		var date = new Date();
 

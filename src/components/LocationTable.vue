@@ -36,6 +36,8 @@
 
 	  <vxe-button status="primary" round @click="addLocation" ref="AddBtn">Add New</vxe-button>
 
+	  <vxe-button status="primary" round @click="this.$parent.MoveToCurPosition" ref="AddBtn">Current Location</vxe-button>
+
 	</div>
 
       </template>
@@ -46,7 +48,7 @@
 
       <vxe-column type="checkbox" width="60"></vxe-column>
       
-      <vxe-column field="Name" title="Name"></vxe-column>
+      <vxe-column field="Name" title="Name" min-width="10px"></vxe-column>
 
       <vxe-column field="Address" title="Address"></vxe-column>
     
@@ -127,6 +129,8 @@
 		  this.locations.unshift(this.results[0]);
 
 		  this.results = [];
+
+		  this.$refs.LocationInput.focus();
 
 	      }
 
